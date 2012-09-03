@@ -1,4 +1,4 @@
-#!/bin/bash
+ï»¿#!/bin/bash
 # simple-central-rsyslog
 # Recipe for a central rsyslog with log compression
 #
@@ -27,7 +27,7 @@ CONFRSYSLOG="https://raw.github.com/jmanteau/simple-central-rsyslog/master/rsysl
 CONFCRON="https://raw.github.com/jmanteau/simple-central-rsyslog/master/rsyslog-bzip2.txt"
 REMOTELOGDIR="/var/log/remote/"
 
-# Fonctions utilisées par le script
+# Fonctions utilisÃ©es par le script
 #---------------------------------
 
 displaymessage() {
@@ -75,18 +75,18 @@ displayandexec() {
 
 # Test que le script est lance en root
 if [ $EUID -ne 0 ]; then
-  displayerror 1 "Le script doit être lancé en root: # su - -c $0"
+  displayerror 1 "Le script doit Ãªtre lancÃ© en root: # su - -c $0"
 fi
 
-# Création du fichier de log
+# CrÃ©ation du fichier de log
 echo "Debut du script" > $LOG_FILE
 
-displaytitle "-- Installation des fichiers et redémarrage du daemon"
-displayandexec "Téléchargement de la configuration rsyslog" $WGET -O /etc/rsyslog.conf $CONFRSYSLOG
-displayandexec "Téléchargement de la configuration cron pour la compression" $WGET -O /etc/cron.daily/rsyslog-bzip2 $CONFCRON
+displaytitle "-- Installation des fichiers et redÃ©marrage du daemon"
+displayandexec "TÃ©lÃ©chargement de la configuration rsyslog" $WGET -O /etc/rsyslog.conf $CONFRSYSLOG
+displayandexec "TÃ©lÃ©chargement de la configuration cron pour la compression" $WGET -O /etc/cron.daily/rsyslog-bzip2 $CONFCRON
 displayandexec "Changement des droits du cron pour la compression" chmod +x /etc/cron.daily/rsyslog-bzip2
-displayandexec "Création du répertoire de log $REMOTELOGDIR" mkdir -p $REMOTELOGDIR
-displayandexec "Redémarrage de rsyslog" /etc/init.d/rsyslog restart
+displayandexec "CrÃ©ation du rÃ©pertoire de log $REMOTELOGDIR" mkdir -p $REMOTELOGDIR
+displayandexec "RedÃ©marrage de rsyslog" /etc/init.d/rsyslog restart
 displaytitle "-- Fin d'installation"
 
 echo "Fin du script" >> $LOG_FILE
