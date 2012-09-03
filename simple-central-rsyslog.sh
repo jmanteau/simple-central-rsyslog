@@ -16,8 +16,6 @@ VERSION="1.0"
 # Variables globales
 #-------------------
 
-HOME_PATH=`grep $USERNAME /etc/passwd | cut -d: -f6`
-APT_GET="apt-get -q -y --force-yes"
 WGET="wget -m --no-check-certificate"
 DATE=`date +"%Y%m%d%H%M%S"`
 LOG_FILE="/tmp/simple-central-rsyslog-$DATE.log"
