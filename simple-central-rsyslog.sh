@@ -82,8 +82,9 @@ fi
 echo "Debut du script" > $LOG_FILE
 
 displaytitle "-- Installation des fichiers et redémarrage du daemon"
-displayandexec "Téléchargement de la configuration rsyslog" $WGET -O /etc/apt/sources.list $CONFRSYSLOG
-displayandexec "Téléchargement de la configuration cron pour la compression" $WGET -O /etc/apt/sources.list $CONFCRON
+displayandexec "Téléchargement de la configuration rsyslog" $WGET -O /etc/rsyslog.conf $CONFRSYSLOG
+displayandexec "Téléchargement de la configuration cron pour la compression" $WGET -O /etc/cron.daily/rsyslog-bzip2 $CONFCRON
+displayandexec "Changement des droits du cron pour la compression" chmod +x /etc/cron.daily/rsyslog-bzip2
 displayandexec "Création du répertoire de log $REMOTELOGDIR" mkdir -p $REMOTELOGDIR
 displayandexec "Redémarrage de rsyslog" /etc/init.d/rsyslog restart
 displaytitle "-- Fin d'installation"
