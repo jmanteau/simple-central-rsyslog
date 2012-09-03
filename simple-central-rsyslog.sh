@@ -1,8 +1,8 @@
-﻿#!/bin/bash
+#!/bin/bash
 # simple-central-rsyslog
 # Recipe for a central rsyslog with log compression
-#
-# jmanteau 03.09.2012
+# 
+# jmanteau 04.09.2012
 # 
 # GPL
 #
