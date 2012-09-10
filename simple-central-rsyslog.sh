@@ -27,7 +27,9 @@ ELASTICSEARCHDEB="https://github.com/downloads/elasticsearch/elasticsearch/elast
 
 LOGSTASHDIR="/opt/logstash"
 LOGSTASHINIT="/etc/init.d/logstash"
-LOGSTASHINITURL="https://raw.github.com/gist/3623477/377c1ec852a2d956f152e032a95644b3f17b5bb4/logstash.sh"
+LOGSTASHINITURL="https://raw.github.com/jmanteau/simple-central-rsyslog/master/logstash"
+LOGSTASHCONF="https://raw.github.com/jmanteau/simple-central-rsyslog/master/logstash.conf"
+LOGSTASHCLEANER="https://raw.github.com/jmanteau/simple-central-rsyslog/master/logstash_index_cleaner.py"
 CONFRSYSLOG="https://raw.github.com/jmanteau/simple-central-rsyslog/master/rsyslog.conf"
 CONFCRON="https://raw.github.com/jmanteau/simple-central-rsyslog/master/rsyslog-bzip2.txt"
 REMOTELOGDIR="/var/log/remote/"
@@ -99,6 +101,8 @@ displayandexec "Making Logstash dirs" mkdir -p $LOGSTASHDIR && mkdir /var/log/lo
 displayandexec "Downloading Logstash jar" $WGET -O $LOGSTASHDIR/logstash.jar $LOGSTASHURL
 displayandexec "Installing Java" $APT install default-jre
 displayandexec "Downloading logstash init.d" $WGET -O $LOGSTASHINIT $LOGSTASHINITURL
+displayandexec "Downloading logstash conf" $WGET -O /etc/logstash/logstash.conf $LOGSTASHCONF
+displayandexec "Downloading logstash cleaner" $WGET -O /opt/logstash/logstash_index_cleaner.py $LOGSTASHCLEANER
 displayandexec "Adjusting rights" chmod +x $LOGSTASHINIT
 displayandexec "Starting at boot" update-rc.d logstash defaults
 
