@@ -1,2 +1,2 @@
 # Compress *.log-files not changed in more than 24 hours:
-find /var/log/remote/-type f -mtime +1  -name "*.log" -exec bzip2 '{}' \;
+find /var/log/remote/ -type f -mtime +1  -name "*.log" -exec bzip2 '{}' \;

@@ -100,13 +100,14 @@ displaytitle "-- Done"
 
 displaytitle "-- LOGSTASH" 
 displayandexec "Making Logstash dirs" mkdir -p $LOGSTASHDIR && mkdir /var/log/logstash && mkdir /etc/logstash
-#displayandexec "Downloading Logstash jar" $WGET -O $LOGSTASHDIR/logstash.jar $LOGSTASHURL
+displayandexec "Downloading Logstash jar" $WGET -O $LOGSTASHDIR/logstash.jar $LOGSTASHURL
 displayandexec "Installing Java" $APT install default-jre
 displayandexec "Downloading logstash init.d" $WGET -O $LOGSTASHINIT $LOGSTASHINITURL
 displayandexec "Downloading logstash conf" $WGET -O /etc/logstash/logstash.conf $LOGSTASHCONF
 displayandexec "Downloading logstash cleaner" $WGET -O /opt/logstash/logstash_index_cleaner.py $LOGSTASHCLEANER
 displayandexec "Adjusting rights" chmod +x $LOGSTASHINIT
 displayandexec "Starting at boot" update-rc.d logstash defaults
+displayandexec "Restarting Logstash"  service logstash restart
 
 # In case of distributed elasticsearch
 #displaytitle "-- ELASTICSEARCH"
@@ -130,16 +131,16 @@ update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.9.1 600 \
 --slave   /usr/bin/ri ri /usr/bin/ri1.9.1 \
 --slave   /usr/bin/irb irb /usr/bin/irb1.9.1
 displayandexec "Installing Ruby stuff" export PATH=/var/lib/gems/1.9/bin/:${PATH} && gem install bundler jls-grok
-displayandexec "Downloading Kibana" cd /var/www/ &&  git clone --branch=kibana-ruby https://github.com/rashidkpc/Kibana.git 
-displayandexec "Installing Ruby gems" cd /var/www/Kibana && bundle install
-echo "#dotdeb nginx"  > /etc/apt/sources.list.d/dotdeb
-echo "deb http://packages.dotdeb.org squeeze all" >> /etc/apt/sources.list.d/dotdeb
-echo "deb-src http://packages.dotdeb.org squeeze all" >> /etc/apt/sources.list.d/dotdeb
+echo "#dotdeb nginx"  > /etc/apt/sources.list.d/dotdeb.list
+echo "deb http://packages.dotdeb.org squeeze all" >> /etc/apt/sources.list.d/dotdeb.list
+echo "deb-src http://packages.dotdeb.org squeeze all" >> /etc/apt/sources.list.d/dotdeb.list
 displayandexec "Adding dotdeb repo" wget http://www.dotdeb.org/dotdeb.gpg
 cat dotdeb.gpg | apt-key add - 
-displayandexec "Installing nginx and passenger" aptitude update && aptitude install nginx-passenger
-displayandexec "Downloading logstash conf" $WGET -O /etc/nginx/nginx-passenger.conf $NGINXPASSENGER
-displayandexec "Downloading logstash conf" $WGET -O /etc/nginx/sites-enabled/vhost-kibana.conf $NGINXKIBANA
+displayandexec "Installing nginx and passenger" aptitude update && $APT install nginx-passenger
+displayandexec "Downloading Nginx Passenger conf" $WGET -O /etc/nginx/nginx-passenger.conf $NGINXPASSENGER
+displayandexec "Downloading Kibana vhost conf" $WGET -O /etc/nginx/sites-enabled/vhost-kibana.conf $NGINXKIBANA
+displayandexec "Downloading Kibana" mkdir /var/www && cd /var/www/ &&  git clone --branch=kibana-ruby https://github.com/rashidkpc/Kibana.git 
+displayandexec "Installing Ruby gems" cd /var/www/Kibana && bundle install
 displayandexec "Adjusting web dir right" chown -R www-data:www-data /var/www/Kibana/
 displayandexec "Restarting Nginx"  service nginx restart
 
