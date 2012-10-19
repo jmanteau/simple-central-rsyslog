@@ -90,6 +90,11 @@ fi
 # Log
 echo "Starting" > $LOG_FILE
 
+displaytitle "-- Update Aptitude"
+displayandexec "Disable CDROM repo" sed -i 's/^deb cdrom/#deb cdrom/g' /etc/apt/sources.list
+displayandexec "aptitude update" aptitude update 
+
+
 displaytitle "-- RSYSLOG"
 displayandexec "Downloading rsyslog configuration" $WGET -O /etc/rsyslog.conf $CONFRSYSLOG
 displayandexec "Downloading cron configuration to compress logs" $WGET -O /etc/cron.daily/rsyslog-bzip2 $CONFCRON
@@ -115,34 +120,51 @@ displayandexec "Restarting Logstash"  service logstash restart
 #displayandexec "Installing Elasticsearch from deb" dpkg -i elasticsearch*.deb
 
 
+# displaytitle "-- KIBANA"
+# displayandexec "Installing requirement" $APT install git ruby-full rubygems curl libcurl3-dev ruby1.9.1-full rubygems1.9.1
+# displaymessage "Make Ruby 1.9 default" 
+##install ruby1.8 & friends with priority 500
+# update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.8 500 \
+# --slave   /usr/share/man/man1/ruby.1.gz ruby.1.gz \
+# /usr/share/man/man1/ruby.1.8.gz \
+# --slave   /usr/bin/ri ri /usr/bin/ri1.8 \
+# --slave   /usr/bin/irb irb /usr/bin/irb1.8
+##install ruby1.9.1 & friends with priority 600 and make them default
+# update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.9.1 600 \
+# --slave   /usr/share/man/man1/ruby.1.gz ruby.1.gz \
+# /usr/share/man/man1/ruby.1.9.1.1.gz \
+# --slave   /usr/bin/ri ri /usr/bin/ri1.9.1 \
+# --slave   /usr/bin/irb irb /usr/bin/irb1.9.1
+# displayandexec "Installing Ruby stuff" export PATH=/var/lib/gems/1.9/bin/:${PATH} && gem install bundler jls-grok
+# echo "#dotdeb nginx"  > /etc/apt/sources.list.d/dotdeb.list
+# echo "deb http://packages.dotdeb.org squeeze all" >> /etc/apt/sources.list.d/dotdeb.list
+# echo "deb-src http://packages.dotdeb.org squeeze all" >> /etc/apt/sources.list.d/dotdeb.list
+# displayandexec "Adding dotdeb repo" wget http://www.dotdeb.org/dotdeb.gpg
+# cat dotdeb.gpg | apt-key add - 
+# displayandexec "Installing nginx and passenger" aptitude update && $APT install nginx-passenger
+# displayandexec "Downloading Nginx Passenger conf" $WGET -O /etc/nginx/nginx-passenger.conf $NGINXPASSENGER
+# displayandexec "Downloading Kibana vhost conf" $WGET -O /etc/nginx/sites-enabled/vhost-kibana.conf $NGINXKIBANA
+# displayandexec "Downloading Kibana" mkdir /var/www && cd /var/www/ &&  git clone --branch=kibana-ruby https://github.com/rashidkpc/Kibana.git 
+# displayandexec "Installing Ruby gems" cd /var/www/Kibana && bundle install
+# displayandexec "Adjusting web dir right" chown -R www-data:www-data /var/www/Kibana/
+# displayandexec "Restarting Nginx"  service nginx restart
+
 displaytitle "-- KIBANA"
-displayandexec "Installing requirement" $APT install git ruby-full rubygems curl libcurl3-dev ruby1.9.1-full rubygems1.9.1
-displaymessage "Make Ruby 1.9 default" 
-# install ruby1.8 & friends with priority 500
-update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.8 500 \
---slave   /usr/share/man/man1/ruby.1.gz ruby.1.gz \
-/usr/share/man/man1/ruby.1.8.gz \
---slave   /usr/bin/ri ri /usr/bin/ri1.8 \
---slave   /usr/bin/irb irb /usr/bin/irb1.8
-# install ruby1.9.1 & friends with priority 600 and make them default
-update-alternatives --install /usr/bin/ruby ruby /usr/bin/ruby1.9.1 600 \
---slave   /usr/share/man/man1/ruby.1.gz ruby.1.gz \
-/usr/share/man/man1/ruby.1.9.1.1.gz \
---slave   /usr/bin/ri ri /usr/bin/ri1.9.1 \
---slave   /usr/bin/irb irb /usr/bin/irb1.9.1
-displayandexec "Installing Ruby stuff" export PATH=/var/lib/gems/1.9/bin/:${PATH} && gem install bundler jls-grok
-echo "#dotdeb nginx"  > /etc/apt/sources.list.d/dotdeb.list
-echo "deb http://packages.dotdeb.org squeeze all" >> /etc/apt/sources.list.d/dotdeb.list
-echo "deb-src http://packages.dotdeb.org squeeze all" >> /etc/apt/sources.list.d/dotdeb.list
-displayandexec "Adding dotdeb repo" wget http://www.dotdeb.org/dotdeb.gpg
-cat dotdeb.gpg | apt-key add - 
-displayandexec "Installing nginx and passenger" aptitude update && $APT install nginx-passenger
-displayandexec "Downloading Nginx Passenger conf" $WGET -O /etc/nginx/nginx-passenger.conf $NGINXPASSENGER
+displayandexec "Installing requirement" $APT install git ruby-full rubygems curl libcurl3-dev ruby1.9.1-full rubygems1.9.1 libapache2-mod-passenger ruby-switch
+displayandexec "Make Ruby 1.9 default" ruby-switch --set ruby1.9.1
+displayandexec "Installing Ruby stuff" gem install bundler jls-grok
+displaymessage "Configuring Passenger for apache"
+echo "PassengerDefaultUser www-data" > "/etc/apache2/mods-available/passenger-user.load"
+a2enmod passenger
+a2enmod passenger-user
 displayandexec "Downloading Kibana vhost conf" $WGET -O /etc/nginx/sites-enabled/vhost-kibana.conf $NGINXKIBANA
 displayandexec "Downloading Kibana" mkdir /var/www && cd /var/www/ &&  git clone --branch=kibana-ruby https://github.com/rashidkpc/Kibana.git 
 displayandexec "Installing Ruby gems" cd /var/www/Kibana && bundle install
 displayandexec "Adjusting web dir right" chown -R www-data:www-data /var/www/Kibana/
-displayandexec "Restarting Nginx"  service nginx restart
+displayandexec "Restarting Nginx"  /etc/init.d/apache2 force-reload
+
+
+apt-get install 
 
 echo "End" >> $LOG_FILE
 
