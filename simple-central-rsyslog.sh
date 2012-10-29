@@ -35,7 +35,7 @@ CONFCRON="https://raw.github.com/jmanteau/simple-central-rsyslog/master/rsyslog-
 NGINXPASSENGER="https://raw.github.com/jmanteau/simple-central-rsyslog/master/nginx-passenger.conf"
 APACHEKIBANA="https://raw.github.com/jmanteau/simple-central-rsyslog/master/vhost-kibana.conf"
 REMOTELOGDIR="/var/log/remote/"
-LOGROTATECONF=""
+LOGROTATECONF="https://raw.github.com/jmanteau/simple-central-rsyslog/master/logrotate-remote.conf"
 
 # Fonctions 
 #---------------------------------
