@@ -1,0 +1,6 @@
+%{SYSLOGTIMESTAMP:timestamp} %{SYSLOGFACILITY} %{SYSLOGHOST:logsource} %{SYSLOGPROG} %{GREEDYDATA:message} 
+%{SYSLOGLINE}
+
+%{SYSLOGTIMESTAMP:timestamp} %{SYSLOGFACILITY} %{SYSLOGHOST:logsource} %{SYSLOGPROG} %{GREEDYDATA:message} 
+
+%{SYSLOGBASE2}%{SPACE}NetScreen device_id=%{WORD:ssg_id}%{GREEDYDATA:message}
