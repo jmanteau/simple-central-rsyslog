@@ -36,6 +36,7 @@ NGINXPASSENGER="https://raw.github.com/jmanteau/simple-central-rsyslog/master/ng
 APACHEKIBANA="https://raw.github.com/jmanteau/simple-central-rsyslog/master/vhost-kibana.conf"
 REMOTELOGDIR="/var/log/remote/"
 LOGROTATECONF="https://raw.github.com/jmanteau/simple-central-rsyslog/master/logrotate-remote.conf"
+PATTERNS="https://raw.github.com/jmanteau/simple-central-rsyslog/master/patterns.tar"
 
 # Fonctions 
 #---------------------------------
@@ -98,10 +99,9 @@ displayandexec "aptitude update" aptitude update
 
 displaytitle "-- RSYSLOG"
 displayandexec "Downloading rsyslog configuration" $WGET -O /etc/rsyslog.conf $CONFRSYSLOG
-# TODO Logrotate conf !!!
+displayandexec "Downloading logrotate conf" $WGET -O /etc/logrotate.d/remote $LOGROTATECONF
 #displayandexec "Downloading cron configuration to compress logs" $WGET -O /etc/cron.daily/rsyslog-bzip2 $CONFCRON
 #displayandexec "Adjusting rights" chmod +x /etc/cron.daily/rsyslog-bzip2
-displayandexec "Downloading logrotate conf" $WGET -O /etc/logrotate.d/remote $LOGROTATECONF
 displayandexec "Making remote log dir" mkdir -p $REMOTELOGDIR
 displayandexec "Restarting rsyslog" /etc/init.d/rsyslog restart
 displaytitle "-- Done"
@@ -113,6 +113,8 @@ displayandexec "Installing Java" $APT install default-jre
 displayandexec "Downloading logstash init.d" $WGET -O $LOGSTASHINIT $LOGSTASHINITURL
 displayandexec "Downloading logstash conf" $WGET -O /etc/logstash/logstash.conf $LOGSTASHCONF
 displayandexec "Downloading logstash cleaner" $WGET -O /opt/logstash/logstash_index_cleaner.py $LOGSTASHCLEANER
+displayandexec "Downloading logstash patterns" $WGET -O /tmp/patterns.tar $PATTERNS
+displayandexec "Extracting logstash patterns" tar /tmp/patterns.tar -C /etc/logstash/
 displayandexec "Adjusting rights" chmod +x $LOGSTASHINIT
 displaymessage "Adjusting open files"
 echo "root soft nofile 32000" >> /etc/security/limits.conf

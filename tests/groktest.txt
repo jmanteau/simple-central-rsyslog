@@ -1,6 +1,19 @@
 %{SYSLOGTIMESTAMP:timestamp} %{SYSLOGFACILITY} %{SYSLOGHOST:logsource} %{SYSLOGPROG} %{GREEDYDATA:message} 
 %{SYSLOGLINE}
 
-%{SYSLOGTIMESTAMP:timestamp} %{SYSLOGFACILITY} %{SYSLOGHOST:logsource} %{SYSLOGPROG} %{GREEDYDATA:message} 
+%{SYSLOGTIMESTAMP:timestamp} %{SYSLOGHOST:logsource} %{WORD:logtype} %{NUMBER} %{NUMBER} %{NUMBER} %{TIMESTAMP_ISO8601} %{ISO8601_TIMEZONE} %{NUMBER} %{NUMBER} %{WORD:loglevel} %{DATA:logtitle}, ConfigVersionId=%{NUMBER:confver}, Device IP Address=%{IP:switchIP}, DestinationIPAddress=%{IP:radiusIP}, DestinationPort=%{NUMBER:dstPort}, UserName=%{WORD:username}, Protocol=%{WORD:protocol}, RequestLatency=%{NUMBER:requestlatency}, NetworkDeviceName=%{WORD:networkdevicename}, AuthorizationPolicyMatchedRule=%{WORD:AuthorizationPolicyMatchedRule}, User-Name=%{WORD:User-Name}, NAS-IP-Address=%{IP:NAS-IP-Address}, NAS-Port=%{NUMBER:NAS-Port}, Service-Type=%{WORD:Service-Type}, {DATA:MTU}, State=%{DATA:State}, Calling-Station-ID=%{MAC:Calling-Station-ID}, NAS-Port-Type=%{WORD:NAS-Port-Type}, Name=%{WORD:NAME}, AcsSessionID=%{DATA:AcsSessionID}, AuthenticationIdentityStore=%{DATA:AuthenticationIdentityStore}, AuthenticationMethod=%{WORD:AuthenticationMethod}, SelectedAccessService=%{DATA:SelectedAccessService}, SelectedAuthorizationProfiles=%{DATA:SelectedAuthorizationProfiles}, IdentityGroup=%{DATA:IdentityGroup}, %{GREEDYDATA:message} 
+
+
+
+%{SYSLOGTIMESTAMP:timestamp} %{SYSLOGHOST:logsource} %{WORD:logtype} %{NUMBER} %{NUMBER} %{NUMBER} %{TIMESTAMP_ISO8601} %{ISO8601_TIMEZONE} %{NUMBER} %{NUMBER} %{WORD:loglevel} %{DATA:logtitle}, ConfigVersionId=%{NUMBER:confver}, Device IP Address=%{IP:switchIP}, DestinationIPAddress=%{IP:radiusIP}, DestinationPort=%{NUMBER:dstPort}, UserName=%{WORD:username}, Protocol=%{WORD:protocol}, RequestLatency=%{NUMBER:requestlatency}, NetworkDeviceName=%{WORD:networkdevicename}, AuthorizationPolicyMatchedRule=%{WORD:AuthorizationPolicyMatchedRule}, User-Name=%{WORD:User-Name}, NAS-IP-Address=%{IP:NAS-IP-Address}, NAS-Port=%{NUMBER:NAS-Port}, Service-Type=%{WORD:Service-Type}, Framed-MTU=%{DATA:MTU}, State=%{DATA:State}, Calling-Station-ID=%{MAC:Calling-Station-ID}, NAS-Port-Type=%{WORD:NAS-Port-Type}, Name=%{WORD:NAME}, AcsSessionID=%{DATA:AcsSessionID}, AuthenticationIdentityStore=%{DATA:AuthenticationIdentityStore}, AuthenticationMethod=%{WORD:AuthenticationMethod}, SelectedAccessService=%{DATA:SelectedAccessService}, SelectedAuthorizationProfiles=%{DATA:SelectedAuthorizationProfiles}, IdentityGroup=%{DATA:IdentityGroup}, %{GREEDYDATA:message} 
+
+
+
+
+
+
+
+
+
 
 %{SYSLOGBASE2}%{SPACE}NetScreen device_id=%{WORD:ssg_id}%{GREEDYDATA:message}
